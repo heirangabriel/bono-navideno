@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Bono Navideño 5K</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, white 2px, transparent 2px), radial-gradient(circle at 75% 75%, white 2px, transparent 2px); background-size: 50px 50px;"></div>
+    </div>
+
+    <div class="relative w-full max-w-md">
+        <div class="text-center mb-8 fade-in">
+            <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-white text-3xl mx-auto mb-4">🎄</div>
+            <h1 class="text-3xl font-bold text-white mb-2">Bono Navideño 5K</h1>
+            <p class="text-white opacity-90">Accede a tu cuenta</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden card-hover">
+            <div class="p-8">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">¡Bienvenido de vuelta!</h2>
+                    <p class="text-gray-600">Ingresa tus credenciales para continuar</p>
+                </div>
+
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Usuario</label>
+                        <div class="relative">
+                            <input type="text" id="username" required
+                                class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
+                                placeholder="Ingresa tu usuario">
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">👤</div>
+                        </div>
+                        <div id="usernameError" class="error-message">Usuario requerido</div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Contraseña</label>
+                        <div class="relative">
+                            <input type="password" id="password" required
+                                class="w-full px-4 py-3 pl-12 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
+                                placeholder="••••••••">
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">🔒</div>
+                            <button type="button" onclick="togglePassword(this)"
+                                class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">👁️</button>
+                        </div>
+                        <div id="passwordError" class="error-message">Contraseña requerida</div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                            <span class="ml-2 text-sm text-gray-600">Recordarme</span>
+                        </label>
+                        <a href="#" class="text-sm text-red-600 hover:text-red-800 transition-colors">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <button type="submit" id="loginBtn"
+                        class="w-full btn-primary text-white py-3 rounded-lg font-semibold transition-all transform hover:scale-105 flex items-center justify-center">
+                        <span>🚀 Iniciar Sesión</span>
+                    </button>
+
+                    <div id="loginMessage" class="text-center text-sm"></div>
+                </form>
+
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600">¿No tienes cuenta? <a href="register.html" class="text-red-600 hover:text-red-800 font-semibold">Regístrate aquí</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-6">
+            <a href="index.html" class="text-white hover:text-yellow-300 transition-colors text-sm">
+                ← Volver al inicio
+            </a>
+        </div>
+
+        <div class="text-center mt-4">
+            <div class="inline-flex items-center px-4 py-2 bg-white bg-opacity-20 rounded-full text-white text-sm">
+                <span class="mr-2">🔐</span>
+                Conexión segura SSL
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const loginMessage = document.getElementById('loginMessage');
+
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('input').forEach(el => el.classList.remove('input-error'));
+
+            let hasErrors = false;
+
+            if (!username) {
+                document.getElementById('usernameError').style.display = 'block';
+                document.getElementById('username').classList.add('input-error');
+                hasErrors = true;
+            }
+
+            if (!password) {
+                document.getElementById('passwordError').style.display = 'block';
+                document.getElementById('password').classList.add('input-error');
+                hasErrors = true;
+            }
+
+            if (hasErrors) return;
+
+            // Show loading
+            loginBtn.innerHTML = '<div class="loading-spinner mr-2"></div> Verificando...';
+            loginBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                // Check credentials
+                if ((username === 'adrian' && password === 'admin123') || checkUserCredentials(username, password)) {
+                    loginMessage.innerHTML = '<div class="success-message" style="display: block;">¡Inicio de sesión exitoso! Redirigiendo...</div>';
+
+                    // Store session
+                    const user = username === 'adrian' ? { username: 'adrian', role: 'admin', name: 'Administrador' } : getUserData(username);
+                    sessionStorage.setItem('currentUser', JSON.stringify(user));
+
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    loginBtn.innerHTML = '<span>🚀 Iniciar Sesión</span>';
+                    loginBtn.disabled = false;
+                    loginMessage.innerHTML = '<div class="error-message" style="display: block; color: #ef4444;">Usuario o contraseña incorrectos</div>';
+                }
+            }, 2000);
+        });
+
+        // Password visibility toggle
+        function togglePassword(button) {
+            const input = button.previousElementSibling.previousElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+    </script>
+</body>
+</html>
